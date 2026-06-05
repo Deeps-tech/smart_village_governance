@@ -1,0 +1,46 @@
+version: '3.8'
+
+services:
+  mongodb:
+    image: mongo:6.0
+    container_name: gramswaraj_db
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+    networks:
+      - gramswaraj-network
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: gramswaraj_backend
+    ports:
+      - "8080:8080"
+    environment:
+      - MONGODB_URI=mongodb://mongodb:27017/smart_village_db
+      - SPRING_DATA_MONGODB_DATABASE=smart_village_db
+    depends_on:
+      - mongodb
+    networks:
+      - gramswaraj-network
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: gramswaraj_frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    networks:
+      - gramswaraj-network
+
+volumes:
+  mongo-data:
+
+networks:
+  gramswaraj-network:
+    driver: bridge

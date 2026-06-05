@@ -1,0 +1,938 @@
+{
+  "info": {
+    "name": "GramSwaraj - Smart Village API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Authentication",
+      "item": [
+        {
+          "name": "Register User (Super Admin)",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"sarpanch_sih\",\n  \"password\": \"password123\",\n  \"email\": \"sarpanch@village.gov.in\",\n  \"role\": \"SUPER_ADMIN\",\n  \"villageId\": \"VILL-001\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/register",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "auth",
+                "register"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Register User (Citizen)",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"aarav_citizen\",\n  \"password\": \"password123\",\n  \"email\": \"aarav@gmail.com\",\n  \"role\": \"CITIZEN\",\n  \"villageId\": \"VILL-001\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/register",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "auth",
+                "register"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Login User",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var jsonData = pm.response.json();",
+                  "if (jsonData.token) {",
+                  "    pm.globals.set(\"jwt_token\", jsonData.token);",
+                  "    pm.globals.set(\"refresh_token\", jsonData.refreshToken);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"admin\",\n  \"password\": \"password123\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/login",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Refresh Access Token",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"refreshToken\": \"{{refresh_token}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/refresh",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "auth",
+                "refresh"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Citizens",
+      "item": [
+        {
+          "name": "Create Citizen Record",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{jwt_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Amit Sen\",\n  \"email\": \"amit.sen@yahoo.com\",\n  \"phone\": \"9911882277\",\n  \"aadhaarRef\": \"1234-5678-0000\",\n  \"occupation\": \"Carpentry\",\n  \"gender\": \"MALE\",\n  \"dateOfBirth\": \"1988-12-05\",\n  \"address\": \"Ward 3, Panchayat Compound, Pipili\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/citizens",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "citizens"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get All Citizens",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{jwt_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/citizens",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "citizens"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Search Citizens by Name",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{jwt_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/citizens?name=Aarav",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "citizens"
+              ],
+              "query": [
+                {
+                  "key": "name",
+                  "value": "Aarav"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Update Citizen Record",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{jwt_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Amit Kumar Sen\",\n  \"email\": \"amit.sen@gmail.com\",\n  \"phone\": \"9911882277\",\n  \"aadhaarRef\": \"1234-5678-0000\",\n  \"occupation\": \"Carpentry & Construction\",\n  \"gender\": \"MALE\",\n  \"dateOfBirth\": \"1988-12-05\",\n  \"address\": \"Ward 3, Panchayat Compound, Pipili\",\n  \"status\": \"ACTIVE\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/citizens/{{citizen_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "citizens",
+                "{{citizen_id}}"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Delete Citizen Record",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{jwt_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/citizens/{{citizen_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "citizens",
+                "{{citizen_id}}"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Grievances",
+      "item": [
+        {
+          "name": "Submit Complaint (As Citizen)",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{jwt_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Drainage overflow near Market square\",\n  \"description\": \"The sewage is overflowing in Ward 2 due to blockages in the primary drainage pipeline, creating a foul smell.\",\n  \"category\": \"Sanitation\",\n  \"imageUrl\": \"https://images.unsplash.com/photo-1599806112354-67f8b5425a06\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/grievances",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "grievances"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get All Grievances",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{jwt_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/grievances",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "grievances"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Assign Officer to Complaint",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{jwt_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"assignedOfficerId\": \"{{officer_id}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/grievances/{{grievance_id}}/assign",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "grievances",
+                "{{grievance_id}}",
+                "assign"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Update Grievance Status",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{jwt_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"IN_PROGRESS\",\n  \"resolutionNotes\": \"Inspection scheduled for tomorrow morning by the sanitization team.\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/grievances/{{grievance_id}}/status",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "grievances",
+                "{{grievance_id}}",
+                "status"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Resolve Grievance",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{jwt_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "Blocked sewers have been cleared using mechanical pumps. Flow is normal now.",
+              "options": {
+                "raw": {
+                  "language": "text"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/grievances/{{grievance_id}}/resolve",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "grievances",
+                "{{grievance_id}}",
+                "resolve"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Schemes",
+      "item": [
+        {
+          "name": "Create Welfare Scheme",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{jwt_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"National Solar Pump Subsidy\",\n  \"description\": \"Provides 90% subsidy to rural farmers for installing grid-connected solar irrigation pumps.\",\n  \"eligibilityCriteria\": \"Farmers holding agriculture land registered in Panchayat with no prior tractor subsidy benefits.\",\n  \"allocatedBudget\": 850000,\n  \"launchDate\": \"2026-06-01\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/schemes",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "schemes"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get All Schemes",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{jwt_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/schemes",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "schemes"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Apply for Scheme",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{jwt_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"citizenName\": \"Aarav Patel\",\n  \"remarks\": \"Requesting solar pump subsidy under the marginal farmers scheme quota.\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/schemes/{{scheme_id}}/apply",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "schemes",
+                "{{scheme_id}}",
+                "apply"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Process Scheme Application Status",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{jwt_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"APPROVED\",\n  \"remarks\": \"Land registration documents checked and approved by the agriculture officer.\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/schemes/{{scheme_id}}/applicants/{{citizen_id}}/status",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "schemes",
+                "{{scheme_id}}",
+                "applicants",
+                "{{citizen_id}}",
+                "status"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Infrastructure",
+      "item": [
+        {
+          "name": "Create Public Asset",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{jwt_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"assetName\": \"Panchayat Community Center\",\n  \"assetType\": \"PUBLIC_BUILDINGS\",\n  \"location\": \"Ward 2, Panchayat Bhavan Compound\",\n  \"status\": \"OPERATIONAL\",\n  \"maintenanceCost\": 24000\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/infrastructure",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "infrastructure"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get All Assets",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{jwt_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/infrastructure",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "infrastructure"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Update Asset Inspection / Status",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{jwt_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"UNDER_MAINTENANCE\",\n  \"maintenanceCost\": 32000\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/infrastructure/{{asset_id}}/status",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "infrastructure",
+                "{{asset_id}}",
+                "status"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Budgets",
+      "item": [
+        {
+          "name": "Allocate Departmental Budget",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{jwt_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"financialYear\": \"2026-2027\",\n  \"allocatedAmount\": 1500000,\n  \"department\": \"ADMINISTRATION\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/budgets",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "budgets"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get All Budgets",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{jwt_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/budgets",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "budgets"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Log Expenditure Transaction",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{jwt_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"amount\": 34000,\n  \"description\": \"Purchase of administrative office stationery and printer paper\",\n  \"category\": \"DEBIT\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/budgets/{{budget_id}}/transactions",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "budgets",
+                "{{budget_id}}",
+                "transactions"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Global Budget Report",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{jwt_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/budgets/report",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "budgets",
+                "report"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Announcements",
+      "item": [
+        {
+          "name": "Publish Announcement",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{jwt_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Monsoon Agriculture Workshop\",\n  \"content\": \"Panchayat is organizing a 2-day monsoon cropping and fertilizer optimization workshop on June 20th. Renowned soil scientists from the State Agri University will be conducting training sessions.\",\n  \"type\": \"EVENT\",\n  \"expiresAt\": \"2026-06-21T18:00:00\",\n  \"postedBy\": \"Sarpanch Office\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/announcements",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "announcements"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Active Announcements",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{jwt_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/announcements",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "announcements"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Delete Announcement",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{jwt_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/announcements/{{announcement_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "announcements",
+                "{{announcement_id}}"
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

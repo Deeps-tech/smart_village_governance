@@ -62,10 +62,6 @@
     @apply w-full bg-slate-900/60 border border-slate-800 rounded-lg px-4 py-2.5 text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-primary/45 focus:border-primary transition-all duration-200 text-sm;
   }
 
-  .form-input.pl-10, .form-input.\!pl-10 {
-    padding-left: 2.5rem !important;
-  }
-
   .form-label {
     @apply block text-slate-400 text-xs font-semibold uppercase tracking-wider mb-2;
   }
@@ -86,4 +82,11 @@
     @apply bg-danger hover:bg-danger-light active:bg-danger-dark text-white text-sm font-semibold px-4 py-2.5 rounded-lg shadow-md shadow-danger/10 transition-all duration-200 flex items-center justify-center gap-2 cursor-pointer;
   }
 }
+
+/* Specificity override for input fields with left icons to prevent text overlapping */
+.form-input.pl-10, 
+.form-input.\!pl-10 {
+  padding-left: 2.5rem !important;
+}
+
 
